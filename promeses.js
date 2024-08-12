@@ -1,3 +1,95 @@
+
+//:Nombre de los intregrantes:
+//1. Santiago Santacruz Pinzon----
+//2. Kevin Steve Romero Rincon----
+
+//--Promice.race--//
+// Creamos dos promesas la cual automaticamente rotornen un 'resolve()'
+// con la palabra Primera, Segunda... Segun su posicion para tener un orden
+// y con el setTimeout les colocamos distintos tiempos de espera
+
+const promise1 = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Primera"), 500);
+  });
+  
+  const promise2 = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Segunda"), 200);
+  });
+  
+  // AHORA--  utilizamos la funcion de 'Promise.race()'
+  // a los cuales les pasamos las promesas 1 y 2, y colocamos las posivilidades donde se resuelve y donde no
+  // aunque nos vamos a enfocar en la de resolucion
+  
+  Promise.race([promise1, promise2])
+    .then((value) => console.log(value))
+    .catch((error) => console.log(error));
+  
+  // ahora como tenemos que las dos promesas solo pueden ejecutar un 'resolve()' el gracias al 'Promise.race()'
+  // .then ejecutará aquella de las promesas que se ejecuten primero.
+  // En este caso, Promise.race() se resuelve con el valor de la promise2 porque se resuelve primero
+  // a pesar de que promise1 se resolverá más tarde.
+  /*
+  Se usa comúnmente en situaciones donde te interesa obtener el resultado de la primera promesa que se 
+  complete, por ejemplo, en escenarios de competencia entre varias fuentes de datos o para implementar 
+  tiempos de espera (timeouts) en tus promesas.
+  */
+  
+  //volvemos a declarar 3 nuevas promesas de las cuales cada uno tiene un tiempo diferente
+  
+  const promiseA = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Primera"), 1000);
+  });
+  
+  const promiseB = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Segunda"), 2000);
+  });
+  
+  const promiseC = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Tercera"), 1500);
+  });
+  // Ahora utilizamos la funcion 'Promise.all()' y dentro le pasamos todas las promesas declaradas
+  Promise.all([promiseA, promiseB, promiseC])
+    .then((results) => {
+      console.log(results); // el resultado de ejecucion de este progama es = ['Primera', 'Segunda', 'Tercera']
+    })
+    .catch((error) => {
+      console.error("Una de las promesas falló:", error);
+    });
+  
+  // La funcion.all espera que todas as promesas se cumplan para poder dar un resultado
+  // en caso de que alguna de las promesas no se resuelvan se ejecutara el .catch donde se mostrara que una de las promesas falló
+  
+  //Ejemplo de fallo//
+  
+  /*
+  const promiseA = new Promise((resolve, reject) => {
+      setTimeout(() => resolve('Primera'), 1000);
+    });
+    
+    const promiseB = new Promise((resolve, reject) => {
+      setTimeout(() => resolve('Segunda'), 2000);
+    });
+    
+    const promiseC = new Promise((resolve, reject) => {
+      setTimeout(() => resolve('Tercera'), 1500);
+    });
+    Promise.all([promiseA, promiseB, promiseC])
+      .then(results => {
+        console.log(results);
+      })
+      .catch(error => {
+        console.error('Una de las promesas falló:', error);// esta vez se ejecutara esta función
+      });
+  */
+  
+  //Casos comunes//
+  /*
+  Cargar datos simultáneamente: Cuando necesitas cargar datos de múltiples fuentes al mismo tiempo y proceder solo cuando todos los datos estén disponibles.
+  Ejecución paralela de tareas: Para ejecutar varias tareas en paralelo y esperar a que todas finalicen.
+  Sincronización de resultados: Para asegurar que todas las tareas asincrónicas se completen antes de realizar alguna acción que dependa de sus resultados.
+  */
+
+  
 //- Promise.any:  Retorna una promesa que se resuelve cuando todas las promesas en el iterable se han resuelto, o se rechaza si una de las promesas en el iterable se rechaza. El resultado es un array con los resultados de cada promesa en el orden en que fueron pasadas.
 
 // Ejemplo de Promise.any
